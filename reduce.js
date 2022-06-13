@@ -6,18 +6,22 @@ function reduce(elements, cb, startingValue) {
     // Elements will be passed one by one into `cb` along with the `startingValue`.
     // `startingValue` should be the first argument passed to `cb` and the array element should be the second argument.
     // `startingValue` is the starting value.  If `startingValue` is undefined then make `elements[0]` the initial value.
-
-
-    let index = startingValue || 0;
-    const combines = elements[index];
-    let reduced = combines;
-    for ( let i = index+1; i < elements.length; ++i ) {
-      reduced = cb(reduced, elements[i] )
+    
+    if(!Array.isArray(elements) || !cb || !elements){
+      return [];
+     }
+     if(startingValue === undefined){
+      startingValue = elements[0];
+     }
+     else{
+      startingValue = cb(startingValue, elements[0]);
     }
-    return reduced;
+    for(let i=1; i<elements.length; i++){
+      let element = elements[i];
+      startingValue = cb(startingValue,element);
+     }
+  return startingValue;
+
   }
 
   module.exports = reduce;
-
-  cb = ( reduced, value ) => reduced += value;
-  // console.log(reduce([1,2,3,4,5], cb));
